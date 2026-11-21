@@ -3068,3 +3068,15 @@ body.motion-off *:after {
 .motion-off .restore-spark {
   display: none !important
 }
+
+.map-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+#map-restart {
+  font-size: 14px;
+  letter-spacing: 1px;
+}

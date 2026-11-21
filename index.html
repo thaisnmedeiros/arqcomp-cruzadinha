@@ -1,35 +1,207 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#251831">
-<title>ÉCLAT — A Última Expedição</title>
-<link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#251831">
+    <title>ÉCLAT — A Última Expedição</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
-<div id="petals" aria-hidden="true"></div>
-<header id="topbar" class="topbar hidden"><button class="wordmark" id="go-home" type="button">✦ ÉCLAT <small>A Última Expedição</small></button><div class="header-center"><span id="chapter-status">PRÓLOGO</span><div class="progress-line"><span id="global-progress"></span></div><span id="counter-top">0 / 12</span></div><nav class="header-actions" aria-label="Menu do jogo"><button id="nav-world" class="small-button" type="button">A expedição</button><button id="nav-puzzle" class="small-button" type="button">O Quadro XII</button><button id="sound-toggle" class="round-button" type="button" aria-label="Desativar som">♫</button><button id="motion-toggle" class="round-button" type="button" aria-label="Desativar animações">✧</button></nav></header>
-<main>
-<section id="screen-cover" class="screen active screen-cover" aria-label="Tela inicial de Éclat">
-<div class="cover-art"><img src="assets/images/capa.png" alt="Jovem pintora contempla uma cidade fantástica de pontes e ruínas iluminadas, sob flores cor-de-rosa." class="cover-image"><button id="cover-play" class="cover-hotspot" aria-label="Iniciar ou continuar expedição" title="Iniciar expedição"></button><button id="cover-audio" class="cover-control cover-audio" type="button" aria-label="Ativar música ambiente" aria-pressed="false"></button><button id="cover-settings" class="cover-control cover-settings" type="button" aria-label="Abrir configurações"></button></div>
-<div class="cover-mobile-action"><button id="cover-play-mobile" class="ornate-button">Iniciar expedição <span>➜</span></button></div>
-</section>
-<section id="screen-prologue" class="screen prologue-screen" aria-label="Prólogo">
-<div class="prologue-backdrop"></div><div class="prologue-panel"><div class="eyebrow">PRÓLOGO · UMA HISTÓRIA ESQUECIDA</div><div class="rune">Ⅻ</div><p class="prologue-line" id="prologue-line" aria-live="polite"></p><div class="prologue-bottom"><span id="prologue-count">01 / 05</span><button id="prologue-next" class="ornate-button">Continuar <span>→</span></button></div></div>
-</section>
-<section id="screen-map" class="screen map-screen" aria-labelledby="map-title"><div class="map-wrap"><div class="eyebrow">AS QUATRO REGIÕES DE ÉCLAT</div><h1 id="map-title">O mundo espera <em>suas cores.</em></h1><p class="map-intro">Éloïse deixou um mapa com quatro lugares que o Esquecimento alcançou. Entre nas pinturas, investigue seus símbolos e recupere os fragmentos.</p><div id="map-cards" class="map-cards"></div><div class="map-bottom"><button class="ornate-button outline" id="map-crossword">Abrir o Quadro XII <span>↗</span></button><span>Os fragmentos ajudam a decifrar a pintura final.</span></div></div></section>
-<section id="screen-act" class="screen act-screen" aria-label="Exploração do ato"><div class="act-canvas" id="act-canvas"><div id="act-image" class="act-image"></div><div class="act-grain"></div><div class="act-vignette"></div><div class="act-topleft"><div class="eyebrow" id="act-number">ATO I</div><h2 id="act-name">O Coração da Cidade</h2><p id="act-description"></p></div><div class="act-hint" id="act-hint" aria-live="polite"></div><div class="hotspots" id="hotspots"></div><div class="restoration-note" id="restoration-note" aria-live="polite" hidden><span class="completion-sigil">✦</span><div class="eyebrow">REGIÃO RESTAURADA</div><h3 id="restoration-title">As cores retornaram</h3><p id="restoration-text">Uma nova passagem se abriu.</p><button class="ornate-button" id="act-next" type="button">Continuar expedição →</button></div><div class="scene-footer"><div id="act-discoveries">0 / 3 símbolos restaurados</div><div class="footer-navigation"><button id="act-back" class="link-ghost">← Voltar ao mapa</button><button id="act-next-compact" class="link-ghost next-compact" hidden>Próximo ato →</button></div></div><div class="dialogue" id="dialogue"><div class="portrait" aria-hidden="true"><img src="assets/images/eloise-retrato.webp" alt=""></div><div class="dialogue-text"><span class="dialogue-name">ÉLOÏSE</span><p id="dialogue-content"></p></div><button class="dialogue-close" id="dialogue-close" aria-label="Fechar diálogo">×</button></div></div></section>
-<section id="screen-puzzle" class="screen puzzle-screen" aria-labelledby="puzzle-title">
-<button type="button" id="manuscript-toggle" class="manuscript-toggle" aria-controls="manuscript-panel" aria-expanded="false">✦ Como jogar</button>
-<div class="atelier-overlay">
- <aside id="manuscript-panel" class="atelier-intro manuscript-panel"><div class="eyebrow">✦ MANUSCRITO Nº XII</div><h1 id="puzzle-title">A Cruzadinha <em>Final</em></h1><p>As palavras descobertas são as últimas pinceladas de Éclat. Escreva diretamente nas casas e restaure o grande quadro.</p><div class="atelier-guide"><b>COMO FUNCIONA</b><p>✎ Selecione as casas e pinte cada letra.</p><p>✦ Clique em <strong>Conferir</strong> para restaurá-la.</p><p>♫ Cada letra produz um som de tinta.</p></div><div class="atelier-progress"><span id="puzzle-count">0 de 12 restauradas</span><div class="atelier-progress-track"><span id="paint-progress"></span></div></div></aside>
- <div class="atelier-workspace"><div class="atelier-heading" aria-label="O Quadro XII">✦ O QUADRO XII ✦</div><div class="grid-scroll atelier-scroll"><div id="crossword" class="crossword" role="group" aria-label="Cruzadinha de arquitetura computacional com 12 palavras conectadas"></div></div><div class="grid-actions"><button id="check-puzzle" class="ornate-button">✦ Conferir</button><button id="reset-puzzle" class="ornate-button outline">↺ Limpar quadro</button><button id="puzzle-finish" class="ornate-button" hidden>✦ Concluir Expedição →</button></div><div id="puzzle-feedback" class="puzzle-feedback" role="status" aria-live="polite">Escolha uma pista e comece a pintar o manuscrito.</div><div id="brush-trail" class="brush-trail" aria-hidden="true"></div></div>
- <aside class="clue-board atelier-clues"><div class="clue-top"><span class="eyebrow">AS PISTAS DO MANUSCRITO</span><h3 id="active-clue-title">Uma palavra espera por você</h3><p id="active-clue-text">Selecione uma casa ou clique em uma pista.</p></div><div class="clue-tabs"><button type="button" class="clue-tab active" data-tab="across">Horizontais</button><button type="button" class="clue-tab" data-tab="down">Verticais</button></div><div class="clue-scroll"><div id="clues-across" class="clues-group"></div><div id="clues-down" class="clues-group" hidden></div></div></aside>
-</div></section>
-<section id="screen-final" class="screen final-screen"><div class="final-glow"><div class="eyebrow">EXPEDIÇÃO CONCLUÍDA</div><div class="final-star">✦</div><h1>Você devolveu as cores <em>ao mundo.</em></h1><p>Os doze fragmentos nunca foram peças isoladas. Eram partes de um mesmo sistema: um mundo só funciona quando seus elementos se conectam.</p><blockquote>“Nada existe sozinho. Até os mundos mais extraordinários dependem de suas conexões.”</blockquote><div class="final-actions"><button id="final-return" class="ornate-button">Voltar ao mapa →</button><button id="final-restart" class="ornate-button outline">Recomeçar a aventura</button></div></div></section>
-</main>
-<dialog id="challenge-dialog" class="challenge-dialog"><div class="challenge-inner"><button type="button" id="challenge-close" class="modal-close" aria-label="Fechar">×</button><span class="eyebrow" id="challenge-sector">ATO I · FRAGMENTO</span><div id="challenge-ornament" class="challenge-ornament">✦</div><h2 id="challenge-title"></h2><p id="challenge-story"></p><div class="challenge-question" id="challenge-question"></div><div id="answer-options" class="answer-options"></div><div id="drop-target" class="drop-target" hidden>✧ Arraste a peça até aqui para encaixar na máquina <small>ou clique na peça desejada</small></div><div id="chapter-instruction" class="chapter-instruction"></div><div id="challenge-result" class="challenge-result" role="status" aria-live="polite"></div><button id="challenge-continue" class="ornate-button" hidden>Guardar fragmento ✧</button></div></dialog>
-<dialog id="settings-dialog" class="reset-dialog settings-dialog" aria-labelledby="settings-title"><div class="settings-inner"><button type="button" id="settings-close" class="settings-x" aria-label="Fechar configurações">×</button><div class="eyebrow">PREFERÊNCIAS DA EXPEDIÇÃO</div><h2 id="settings-title">Configurações</h2><p>Personalize como deseja explorar Éclat.</p><button type="button" id="settings-sound" class="settings-option"><span><strong>♫ Música e efeitos</strong><small>Melodia ambiente e sons das descobertas</small></span><b id="settings-sound-state">Ligado</b></button><button type="button" id="settings-motion" class="settings-option"><span><strong>✧ Animações</strong><small>Pétalas, brilhos e transições</small></span><b id="settings-motion-state">Ligadas</b></button><button type="button" id="settings-restart" class="ornate-button outline settings-restart">Reiniciar aventura</button></div></dialog>
-<dialog id="reset-dialog" class="reset-dialog"><form method="dialog"><h2>Começar uma nova expedição?</h2><p>O mapa e os fragmentos serão reiniciados. As palavras já digitadas no Quadro XII também serão apagadas.</p><div class="reset-buttons"><button value="cancel" class="ornate-button outline">Cancelar</button><button value="confirm" class="ornate-button">Recomeçar</button></div></form></dialog>
-<footer class="footer-credit">Thais Nunes de Medeiros — 1ADSB <span>✦</span> Arquitetura Computacional</footer>
-</body></html>
+    <div id="petals" aria-hidden="true"></div>
+    <header id="topbar" class="topbar hidden"><button class="wordmark" id="go-home" type="button">✦ ÉCLAT <small>A
+                Última Expedição</small></button>
+        <div class="header-center"><span id="chapter-status">PRÓLOGO</span>
+            <div class="progress-line"><span id="global-progress"></span></div><span id="counter-top">0 / 12</span>
+        </div>
+        <nav class="header-actions" aria-label="Menu do jogo"><button id="nav-world" class="small-button"
+                type="button">A expedição</button><button id="nav-puzzle" class="small-button" type="button">O Quadro
+                XII</button><button id="sound-toggle" class="round-button" type="button"
+                aria-label="Desativar som">♫</button><button id="motion-toggle" class="round-button" type="button"
+                aria-label="Desativar animações">✧</button></nav>
+    </header>
+    <main>
+        <section id="screen-cover" class="screen active screen-cover" aria-label="Tela inicial de Éclat">
+            <div class="cover-art"><img src="assets/images/capa.png"
+                    alt="Jovem pintora contempla uma cidade fantástica de pontes e ruínas iluminadas, sob flores cor-de-rosa."
+                    class="cover-image"><button id="cover-play" class="cover-hotspot"
+                    aria-label="Iniciar ou continuar expedição" title="Iniciar expedição"></button><button
+                    id="cover-audio" class="cover-control cover-audio" type="button" aria-label="Ativar música ambiente"
+                    aria-pressed="false"></button><button id="cover-settings" class="cover-control cover-settings"
+                    type="button" aria-label="Abrir configurações"></button></div>
+            <div class="cover-mobile-action"><button id="cover-play-mobile" class="ornate-button">Iniciar expedição
+                    <span>➜</span></button></div>
+        </section>
+        <section id="screen-prologue" class="screen prologue-screen" aria-label="Prólogo">
+            <div class="prologue-backdrop"></div>
+            <div class="prologue-panel">
+                <div class="eyebrow">PRÓLOGO · UMA HISTÓRIA ESQUECIDA</div>
+                <div class="rune">Ⅻ</div>
+                <p class="prologue-line" id="prologue-line" aria-live="polite"></p>
+                <div class="prologue-bottom"><span id="prologue-count">01 / 05</span><button id="prologue-next"
+                        class="ornate-button">Continuar <span>→</span></button></div>
+            </div>
+        </section>
+        <section id="screen-map" class="screen map-screen" aria-labelledby="map-title">
+            <div class="map-wrap">
+                <div class="eyebrow">AS QUATRO REGIÕES DE ÉCLAT</div>
+                <h1 id="map-title">O mundo espera <em>suas cores.</em></h1>
+                <p class="map-intro">Éloïse deixou um mapa com quatro lugares que o Esquecimento alcançou. Entre nas
+                    pinturas, investigue seus símbolos e recupere os fragmentos.</p>
+                <div id="map-cards" class="map-cards"></div>
+                <div class="map-bottom">
+
+                    <div class="map-actions">
+                        <button class="ornate-button outline" id="map-crossword">
+                            Abrir o Quadro XII <span>↗</span>
+                        </button>
+
+                        <button class="ornate-button outline" id="map-restart">
+                            ↻ Reiniciar expedição
+                        </button>
+                    </div>
+
+                    <span>Os fragmentos ajudam a decifrar a pintura final.</span>
+
+                </div>
+            </div>
+        </section>
+        <section id="screen-act" class="screen act-screen" aria-label="Exploração do ato">
+            <div class="act-canvas" id="act-canvas">
+                <div id="act-image" class="act-image"></div>
+                <div class="act-grain"></div>
+                <div class="act-vignette"></div>
+                <div class="act-topleft">
+                    <div class="eyebrow" id="act-number">ATO I</div>
+                    <h2 id="act-name">O Coração da Cidade</h2>
+                    <p id="act-description"></p>
+                </div>
+                <div class="act-hint" id="act-hint" aria-live="polite"></div>
+                <div class="hotspots" id="hotspots"></div>
+                <div class="restoration-note" id="restoration-note" aria-live="polite" hidden><span
+                        class="completion-sigil">✦</span>
+                    <div class="eyebrow">REGIÃO RESTAURADA</div>
+                    <h3 id="restoration-title">As cores retornaram</h3>
+                    <p id="restoration-text">Uma nova passagem se abriu.</p><button class="ornate-button" id="act-next"
+                        type="button">Continuar expedição →</button>
+                </div>
+                <div class="scene-footer">
+                    <div id="act-discoveries">0 / 3 símbolos restaurados</div>
+                    <div class="footer-navigation"><button id="act-back" class="link-ghost">← Voltar ao
+                            mapa</button><button id="act-next-compact" class="link-ghost next-compact" hidden>Próximo
+                            ato →</button></div>
+                </div>
+                <div class="dialogue" id="dialogue">
+                    <div class="portrait" aria-hidden="true"><img src="assets/images/eloise-retrato.webp" alt=""></div>
+                    <div class="dialogue-text"><span class="dialogue-name">ÉLOÏSE</span>
+                        <p id="dialogue-content"></p>
+                    </div><button class="dialogue-close" id="dialogue-close" aria-label="Fechar diálogo">×</button>
+                </div>
+            </div>
+        </section>
+        <section id="screen-puzzle" class="screen puzzle-screen" aria-labelledby="puzzle-title">
+            <button type="button" id="manuscript-toggle" class="manuscript-toggle" aria-controls="manuscript-panel"
+                aria-expanded="false">✦ Como jogar</button>
+            <div class="atelier-overlay">
+                <aside id="manuscript-panel" class="atelier-intro manuscript-panel">
+                    <div class="eyebrow">✦ MANUSCRITO Nº XII</div>
+                    <h1 id="puzzle-title">A Cruzadinha <em>Final</em></h1>
+                    <p>As palavras descobertas são as últimas pinceladas de Éclat. Escreva diretamente nas casas e
+                        restaure o grande quadro.</p>
+                    <div class="atelier-guide"><b>COMO FUNCIONA</b>
+                        <p>✎ Selecione as casas e pinte cada letra.</p>
+                        <p>✦ Clique em <strong>Conferir</strong> para restaurá-la.</p>
+                        <p>♫ Cada letra produz um som de tinta.</p>
+                    </div>
+                    <div class="atelier-progress"><span id="puzzle-count">0 de 12 restauradas</span>
+                        <div class="atelier-progress-track"><span id="paint-progress"></span></div>
+                    </div>
+                </aside>
+                <div class="atelier-workspace">
+                    <div class="atelier-heading" aria-label="O Quadro XII">✦ O QUADRO XII ✦</div>
+                    <div class="grid-scroll atelier-scroll">
+                        <div id="crossword" class="crossword" role="group"
+                            aria-label="Cruzadinha de arquitetura computacional com 12 palavras conectadas"></div>
+                    </div>
+                    <div class="grid-actions"><button id="check-puzzle" class="ornate-button">✦ Conferir</button><button
+                            id="reset-puzzle" class="ornate-button outline">↺ Limpar quadro</button><button
+                            id="puzzle-finish" class="ornate-button" hidden>✦ Concluir Expedição →</button></div>
+                    <div id="puzzle-feedback" class="puzzle-feedback" role="status" aria-live="polite">Escolha uma pista
+                        e comece a pintar o manuscrito.</div>
+                    <div id="brush-trail" class="brush-trail" aria-hidden="true"></div>
+                </div>
+                <aside class="clue-board atelier-clues">
+                    <div class="clue-top"><span class="eyebrow">AS PISTAS DO MANUSCRITO</span>
+                        <h3 id="active-clue-title">Uma palavra espera por você</h3>
+                        <p id="active-clue-text">Selecione uma casa ou clique em uma pista.</p>
+                    </div>
+                    <div class="clue-tabs"><button type="button" class="clue-tab active"
+                            data-tab="across">Horizontais</button><button type="button" class="clue-tab"
+                            data-tab="down">Verticais</button></div>
+                    <div class="clue-scroll">
+                        <div id="clues-across" class="clues-group"></div>
+                        <div id="clues-down" class="clues-group" hidden></div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+        <section id="screen-final" class="screen final-screen">
+            <div class="final-glow">
+                <div class="eyebrow">EXPEDIÇÃO CONCLUÍDA</div>
+                <div class="final-star">✦</div>
+                <h1>Você devolveu as cores <em>ao mundo.</em></h1>
+                <p>Os doze fragmentos nunca foram peças isoladas. Eram partes de um mesmo sistema: um mundo só funciona
+                    quando seus elementos se conectam.</p>
+                <blockquote>“Nada existe sozinho. Até os mundos mais extraordinários dependem de suas conexões.”
+                </blockquote>
+                <div class="final-actions"><button id="final-return" class="ornate-button">Voltar ao mapa
+                        →</button><button id="final-restart" class="ornate-button outline">Recomeçar a aventura</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <dialog id="challenge-dialog" class="challenge-dialog">
+        <div class="challenge-inner"><button type="button" id="challenge-close" class="modal-close"
+                aria-label="Fechar">×</button><span class="eyebrow" id="challenge-sector">ATO I · FRAGMENTO</span>
+            <div id="challenge-ornament" class="challenge-ornament">✦</div>
+            <h2 id="challenge-title"></h2>
+            <p id="challenge-story"></p>
+            <div class="challenge-question" id="challenge-question"></div>
+            <div id="answer-options" class="answer-options"></div>
+            <div id="drop-target" class="drop-target" hidden>✧ Arraste a peça até aqui para encaixar na máquina
+                <small>ou clique na peça desejada</small>
+            </div>
+            <div id="chapter-instruction" class="chapter-instruction"></div>
+            <div id="challenge-result" class="challenge-result" role="status" aria-live="polite"></div><button
+                id="challenge-continue" class="ornate-button" hidden>Guardar fragmento ✧</button>
+        </div>
+    </dialog>
+    <dialog id="settings-dialog" class="reset-dialog settings-dialog" aria-labelledby="settings-title">
+        <div class="settings-inner"><button type="button" id="settings-close" class="settings-x"
+                aria-label="Fechar configurações">×</button>
+            <div class="eyebrow">PREFERÊNCIAS DA EXPEDIÇÃO</div>
+            <h2 id="settings-title">Configurações</h2>
+            <p>Personalize como deseja explorar Éclat.</p><button type="button" id="settings-sound"
+                class="settings-option"><span><strong>♫ Música e efeitos</strong><small>Melodia ambiente e sons das
+                        descobertas</small></span><b id="settings-sound-state">Ligado</b></button><button type="button"
+                id="settings-motion" class="settings-option"><span><strong>✧ Animações</strong><small>Pétalas, brilhos e
+                        transições</small></span><b id="settings-motion-state">Ligadas</b></button><button type="button"
+                id="settings-restart" class="ornate-button outline settings-restart">Reiniciar aventura</button>
+        </div>
+    </dialog>
+    <dialog id="reset-dialog" class="reset-dialog">
+        <form method="dialog">
+            <h2>Começar uma nova expedição?</h2>
+            <p>O mapa e os fragmentos serão reiniciados. As palavras já digitadas no Quadro XII também serão apagadas.
+            </p>
+            <div class="reset-buttons"><button value="cancel" class="ornate-button outline">Cancelar</button><button
+                    value="confirm" class="ornate-button">Recomeçar</button></div>
+        </form>
+    </dialog>
+    <footer class="footer-credit">Thais Nunes de Medeiros — 1ADSB <span>✦</span> Arquitetura Computacional</footer>
+</body>
+
+</html>
