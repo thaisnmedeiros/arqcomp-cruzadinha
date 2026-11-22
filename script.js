@@ -281,3 +281,53 @@ document.querySelectorAll('.clue-tab').forEach(tab => tab.addEventListener('clic
 // Painel do manuscrito: recolhido no desktop para manter a pintora visível.
 const manuscriptToggle = document.getElementById('manuscript-toggle');
 if (manuscriptToggle) { manuscriptToggle.addEventListener('click', () => { const opened = document.body.classList.toggle('manuscript-open'); manuscriptToggle.setAttribute('aria-expanded', String(opened)); manuscriptToggle.textContent = opened ? '× Fechar instruções' : '✦ Como jogar' }); }
+
+
+// Rastro de tinta: pequenas pinceladas acompanham o mouse e desaparecem suavemente.
+// O efeito respeita a opcao de animacoes e a preferencia de movimento reduzido.
+function initPaintCursor() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(pointer: fine)');
+  if (!finePointer.matches) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'paint-cursor-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(layer);
+
+  const colors = ['#e7a0d4', '#bc84da', '#e6bb77', '#f2c0d6'];
+  let lastTime = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let index = 0;
+  const maxMarks = 24;
+
+  document.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
+    if (!state.motion || reducedMotion.matches || document.hidden) return;
+    if (event.buttons !== 0) return;
+    const now = performance.now();
+    const distance = Math.hypot(event.clientX - lastX, event.clientY - lastY);
+    if (now - lastTime < 34 || distance < 11) return;
+
+    const angle = Math.atan2(event.clientY - lastY, event.clientX - lastX);
+    lastTime = now;
+    lastX = event.clientX;
+    lastY = event.clientY;
+
+    const mark = document.createElement('span');
+    mark.className = 'paint-cursor-mark';
+    mark.style.left = event.clientX + 'px';
+    mark.style.top = event.clientY + 'px';
+    mark.style.setProperty('--paint-color', colors[index++ % colors.length]);
+    mark.style.setProperty('--paint-angle', angle + 'rad');
+    layer.appendChild(mark);
+    mark.addEventListener('animationend', () => mark.remove(), { once: true });
+    while (layer.childElementCount > maxMarks) layer.firstElementChild.remove();
+  }, { passive: true });
+
+  // Sem marcas paradas se as animacoes forem desativadas durante o uso.
+  document.getElementById('settings-motion')?.addEventListener('click', () => layer.replaceChildren());
+  document.getElementById('motion-toggle')?.addEventListener('click', () => layer.replaceChildren());
+}
+initPaintCursor();

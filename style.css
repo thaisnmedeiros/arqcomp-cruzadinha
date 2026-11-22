@@ -3153,3 +3153,44 @@ body.motion-off *:after {
   -webkit-mask-image: linear-gradient(to right, black 0 var(--map-reveal), transparent var(--map-reveal) 100%);
   mask-image: linear-gradient(to right, black 0 var(--map-reveal), transparent var(--map-reveal) 100%);
 }
+
+
+/* Pinceladas delicadas que seguem o ponteiro sem atrapalhar os cliques. */
+.paint-cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.paint-cursor-mark {
+  position: absolute;
+  width: 24px;
+  height: 8px;
+  border-radius: 75% 30% 70% 40%;
+  background: linear-gradient(90deg, transparent 0%, var(--paint-color) 27%, var(--paint-color) 70%, transparent 100%);
+  opacity: .75;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--paint-color), transparent 58%);
+  transform-origin: 0 50%;
+  animation: paint-mark-fade .68s ease-out forwards;
+}
+.paint-cursor-mark::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: -5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--paint-color);
+  opacity: .65;
+}
+@keyframes paint-mark-fade {
+  0% { opacity: .8; transform: rotate(var(--paint-angle)) translate(-5px, -3px) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--paint-angle)) translate(-5px, -3px) scale(.45); }
+}
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .paint-cursor-layer { display: none !important; }
+}
+body.motion-off .paint-cursor-layer { display: none !important; }
