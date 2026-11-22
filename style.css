@@ -3080,3 +3080,76 @@ body.motion-off *:after {
   font-size: 14px;
   letter-spacing: 1px;
 }
+
+/* v10 — restauração progressiva. A arte final permanece em sua resolução original. */
+.act-canvas .act-image,
+.act-canvas .act-image-restored {
+  position: absolute;
+  inset: 0;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: none !important;
+  pointer-events: none;
+  image-rendering: auto;
+}
+.act-canvas .act-image {
+  filter: grayscale(.83) saturate(.4) brightness(.72) contrast(.95) !important;
+}
+.act-canvas[data-act="0"] .act-image {
+  /* A imagem destruída da cidade já apresenta ruínas, então basta um tom leve. */
+  filter: saturate(.73) brightness(.91) !important;
+}
+.act-canvas .act-image-restored {
+  z-index: 1;
+  filter: none !important;
+  opacity: 1;
+  transition: opacity .6s ease;
+  will-change: mask-image;
+}
+.act-canvas .scene-ruins {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: .76;
+  transition: opacity 1.1s ease;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(17,13,32,.34), transparent 53%, rgba(27,16,37,.2));
+}
+.act-canvas .scene-ruins svg {
+  width: 100%; height: 100%; display:block;
+}
+.act-canvas .scene-ruins path {
+  fill: none;
+  stroke: rgba(23,12,35,.72);
+  stroke-width: 5;
+  stroke-linejoin: bevel;
+  filter: drop-shadow(1px 1px 2px rgba(235,211,207,.37));
+}
+/* Mantém o degradê de leitura e os elementos clicáveis acima das pinturas. */
+.act-canvas .act-grain,
+.act-canvas .act-vignette { z-index: 3; }
+.act-canvas .act-topleft,
+.act-canvas .hotspots,
+.act-canvas .act-hint,
+.act-canvas .scene-footer,
+.act-canvas .dialogue,
+.act-canvas .restoration-note { z-index: 5; }
+.act-canvas[data-fragments="3"] .scene-ruins { opacity: 0 !important; }
+.act-canvas.celebrated .act-image-restored { filter: none !important; }
+@media(prefers-reduced-motion:reduce) {
+  .act-canvas .scene-ruins, .act-canvas .act-image-restored { transition: none !important; }
+}
+
+/* Prévia da mesma restauração no mapa de regiões. */
+.map-card .map-image-damaged {
+  filter: grayscale(.86) saturate(.35) brightness(.74) !important;
+}
+.map-card[data-act="0"] .map-image-damaged {
+  filter: saturate(.70) brightness(.88) !important;
+}
+.map-card .map-image-restored {
+  filter: none !important;
+  -webkit-mask-image: linear-gradient(to right, black 0 var(--map-reveal), transparent var(--map-reveal) 100%);
+  mask-image: linear-gradient(to right, black 0 var(--map-reveal), transparent var(--map-reveal) 100%);
+}

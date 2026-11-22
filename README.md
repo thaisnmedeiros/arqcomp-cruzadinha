@@ -60,3 +60,12 @@ O tabuleiro foi redimensionado, centralizado na tela de pintura e separado do pa
 
 ## Versão 9 — Celebração dos atos
 As janelas de conclusão foram substituídas por painéis compactos no rodapé, com fala temporária de Éloïse e partículas douradas quando o terceiro símbolo é restaurado. O painel de instruções some quando a região é concluída, e o botão de avançar permanece visível. As imagens e a cruzadinha foram preservadas da versão 8.
+
+
+## Restauração progressiva dos cenários (v10)
+
+Cada ato começa visualmente danificado. Ao recuperar cada um dos três fragmentos, uma região da ilustração restaurada é revelada a partir do objeto investigado. Ao recuperar os três, a imagem aparece inteira e o jogo apresenta a conclusão do ato. O progresso continua salvo no `localStorage` e o reinício da expedição limpa as descobertas.
+
+O **Ato I** já possui uma arte específica destruída (`cidade-destruida.webp`). Os atos II, III e IV têm, nesta versão, um estado provisório de deterioração realizado com camadas visuais (dessaturação, escurecimento e fissuras), **não** ilustrações de ruínas próprias. Para obter o mesmo acabamento narrativo da cidade, essas três regiões ainda precisam de artes destruídas exclusivas. A arquitetura de duas camadas já suporta substituí-las, alterando `damagedArt` em `openAct`.
+
+**Para testar:** em uma expedição nova, abrir o Ato I; conferir o estado destruído (0/3), recuperar os fragmentos em qualquer ordem (1/3 e 2/3), conferir a restauração completa (3/3), atualizar a página e confirmar a persistência. Repetir nos demais atos e usar *Reiniciar expedição*.

@@ -71,7 +71,16 @@
         </section>
         <section id="screen-act" class="screen act-screen" aria-label="Exploração do ato">
             <div class="act-canvas" id="act-canvas">
-                <div id="act-image" class="act-image"></div>
+                <div id="act-image" class="act-image" aria-hidden="true"></div>
+                <div id="act-image-restored" class="act-image-restored" aria-hidden="true"></div>
+                <div class="scene-ruins" id="scene-ruins" aria-hidden="true">
+                    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <path d="M-20 205 165 180 220 252 310 238 390 285 475 261 540 325"/>
+                        <path d="M1110 40 1092 170 1138 220 1118 301 1160 355 1144 440"/>
+                        <path d="M310 710 400 645 474 700 533 650 622 687 715 630"/>
+                        <path d="M1330 810 1297 703 1355 668 1325 578 1402 545"/>
+                    </svg>
+                </div>
                 <div class="act-grain"></div>
                 <div class="act-vignette"></div>
                 <div class="act-topleft">

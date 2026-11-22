@@ -43,7 +43,7 @@ function start() { if (!state.prologueDone) { show('prologue'); prologueIndex = 
 function renderPrologue() { $('prologue-line').textContent = introLines[prologueIndex]; $('prologue-count').textContent = String(prologueIndex + 1).padStart(2, '0') + ' / 05'; $('prologue-next').textContent = prologueIndex === introLines.length - 1 ? 'Começar a expedição →' : 'Continuar →' }
 function nextPrologue() { if (prologueIndex < introLines.length - 1) { prologueIndex++; renderPrologue(); audio('click') } else { state.prologueDone = true; save(); renderMap(); show('map'); audio('chapter') } }
 function chapterUnlocked(index) { return index === 0 || chapters.slice(0, index).every(ch => ch.items.every(it => solved(it.word))) }
-function renderMap() { $('map-cards').innerHTML = chapters.map((ch, i) => { const unlocked = chapterUnlocked(i), count = ch.items.filter(it => solved(it.word)).length; return `<button class="map-card" data-act="${i}" ${unlocked ? '' : 'disabled'}><span class="map-image" style="background-image:url('assets/images/${ch.image}-arte.webp')"></span><span class="map-shade"></span><span class="map-content"><span class="map-index">${ch.label} · ${unlocked ? 'EXPLORAR' : 'BLOQUEADO'}</span><h2>${ch.title}</h2><p>${ch.desc}</p><span class="map-status">${unlocked ? `${count} de 3 fragmentos · ${count === 3 ? 'Restaurado ✓' : 'Entrar →'}` : 'Complete a região anterior 🔒'}</span></span></button>` }).join(''); document.querySelectorAll('.map-card[data-act]').forEach(btn => btn.addEventListener('click', () => openAct(Number(btn.dataset.act)))) }
+function renderMap() { $('map-cards').innerHTML = chapters.map((ch, i) => { const unlocked = chapterUnlocked(i), count = ch.items.filter(it => solved(it.word)).length; return `<button class="map-card" data-act="${i}" ${unlocked ? '' : 'disabled'} style="--map-reveal:${count / 3 * 100}%"><span class="map-image map-image-damaged" style="background-image:url('assets/images/${i === 0 ? 'cidade-destruida.webp' : ch.image + '-arte.webp'}')"></span><span class="map-image map-image-restored" style="background-image:url('assets/images/${ch.image}-arte.webp')"></span><span class="map-shade"></span><span class="map-content"><span class="map-index">${ch.label} · ${unlocked ? 'EXPLORAR' : 'BLOQUEADO'}</span><h2>${ch.title}</h2><p>${ch.desc}</p><span class="map-status">${unlocked ? `${count} de 3 fragmentos · ${count === 3 ? 'Restaurado ✓' : 'Entrar →'} · ${'◆'.repeat(count)}${'◇'.repeat(3 - count)}` : 'Complete a região anterior 🔒'}</span></span></button>` }).join(''); document.querySelectorAll('.map-card[data-act]').forEach(btn => btn.addEventListener('click', () => openAct(Number(btn.dataset.act)))) }
 const stageHints = [
   'OFICINA DA CIDADE · Relacione cada figura à sua função para reconstruir o mecanismo.',
   'BIBLIOTECA VIVA · Escolha a memória adequada para preservar cada lembrança.',
@@ -92,7 +92,12 @@ function nextStage() { if (!stageComplete()) return; audio('chapter'); if (state
 function openAct(index) {
   if (!chapterUnlocked(index)) return;
   clearTimeout(restorationTimer); freshlyCompleted = false; state.chapter = index; save(); let ch = chapters[index];
-  $('act-image').style.backgroundImage = `url('assets/images/${ch.image}-arte.webp')`;
+  // Duas camadas independentes: um mundo danificado e a pintura original restaurada.
+  // A cidade possui arte destruída própria; as outras regiões usam um estado
+  // de deterioração visual enquanto aguardam ilustrações destruídas exclusivas.
+  const damagedArt = index === 0 ? 'cidade-destruida.webp' : `${ch.image}-arte.webp`;
+  $('act-image').style.backgroundImage = `url('assets/images/${damagedArt}')`;
+  $('act-image-restored').style.backgroundImage = `url('assets/images/${ch.image}-arte.webp')`;
   $('act-canvas').dataset.act = String(index);
   $('act-number').textContent = ch.label; $('act-name').textContent = ch.title; $('act-description').textContent = ch.desc;
   $('act-hint').textContent = stageHints[index]; renderHotspots(); updateStageCompletion();
@@ -106,8 +111,19 @@ function renderHotspots() {
   const actPositions = [[[51, 51], [77, 57], [27, 55]], [[25, 55], [75, 52], [51, 53]], [[52, 49], [25, 57], [77, 56]], [[52, 54], [27, 58], [77, 58]]];
   const verbs = ['ENCAIXAR', 'GUARDAR', 'CONECTAR', 'REVELAR'];
   $('hotspots').innerHTML = ch.items.map((it, i) => `<button class="hotspot stage-${state.chapter} ${solved(it.word) ? 'solved' : ''}" data-item="${i}" style="left:${actPositions[state.chapter][i][0]}%;top:${actPositions[state.chapter][i][1]}%" aria-label="${solved(it.word) ? 'Rever' : 'Explorar'} ${it.name}"><span class="hotspot-glyph">${solved(it.word) ? '✦' : it.symbol}</span><span class="hotspot-copy"><strong>${stageNames[state.chapter][i]}</strong><small>${solved(it.word) ? 'RESTAURADO' : verbs[state.chapter]}</small></span></button>`).join('');
-  const saturation = .40 + (count / 3) * .60;
-  $('act-image').style.filter = 'none';
+  // Cada fragmento recuperado devolve as cores à região do objeto investigado.
+  // Mantemos todas as descobertas existentes em state.discovered, inclusive após F5.
+  const points = actPositions[state.chapter].filter((_, i) => solved(ch.items[i].word));
+  const painting = $('act-image-restored');
+  const revealMasks = points.map(([x, y]) =>
+    `radial-gradient(ellipse 38% 49% at ${x}% ${y}%, black 0%, black 58%, transparent 100%)`
+  );
+  const mask = count === 3 ? 'none' : revealMasks.length ? revealMasks.join(', ') : 'linear-gradient(transparent, transparent)';
+  painting.style.webkitMaskImage = mask;
+  painting.style.maskImage = mask;
+  $('act-canvas').style.setProperty('--restoration', String(count / 3));
+  $('act-canvas').dataset.fragments = String(count);
+  $('scene-ruins').style.opacity = String(Math.max(0, 0.76 - count * 0.25));
   $('act-canvas').classList.toggle('restored', count === 3);
   document.querySelectorAll('.hotspot').forEach(b => b.addEventListener('click', () => openChallenge(Number(b.dataset.item))));
   updateStageCompletion();
